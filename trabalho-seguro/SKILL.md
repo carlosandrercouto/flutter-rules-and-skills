@@ -51,19 +51,47 @@ Não escreva nem rode nada que altere o projeto antes de passar por aqui.
 
 ## 2. Durante a execução
 
-- **Fique no escopo.** Só mexa no que o plano aprovado cobre. Encontrou algo fora
-  do contexto que valeria arrumar? **Anote e pergunte antes** — não "aproveite pra
-  consertar" sem pedir. Escopo que cresce em silêncio é o principal jeito de estragar.
+- **Fique no escopo.** Só mexa no plano aprovado. Encontrou algo fora do contexto que
+  valeria arrumar? **Anote e pergunte antes** — não "aproveite pra consertar" sem
+  pedir. Escopo que cresce em silêncio é o principal jeito de estragar.
+- **Seja proativo com escopo controlado.** Conduza a tarefa até a implementação e a
+  validação necessárias, tomando as decisões locais que forem sustentadas pelo código e
+  pelo requisito. Atualize os testes unitários afetados quando a implementação alterar
+  o contrato ou o comportamento coberto, sem pedir confirmação para esse ajuste
+  necessário. Faça a menor mudança suficiente para preservar o contrato existente.
+  Evite refatorações cosméticas, abstrações, compatibilidades e múltiplos fallbacks sem
+  requisito explícito, evidência no código ou necessidade comprovada de preservar
+  comportamento. Não amplie a solução por preciosismo; se uma alternativa simples
+  resolve o problema, prefira-a.
 - **Passos pequenos e reversíveis.** Prefira mudanças incrementais e saiba como
   reverter cada uma antes de fazê-la.
 - **Demonstre o que fica pronto.** Ao concluir cada item do checklist, marque-o e
   mostre o resultado: resumo curto + evidência (`arquivo:linha`, saída de comando,
   screenshot). Nada de "terminei tudo" sem mostrar o quê.
+- **Cobertura completa.** Ao alterar uma feature, verifique as camadas de domain,
+  data, presentation e resources. Adicione testes unitários para cada camada
+  afetada e testes integrados para widgets/pages quando o fluxo depender de router,
+  composição visual ou mock server.
+- **Contrato de referência.** Antes de estruturar ou alterar uma feature, identifique
+  um módulo/feature maduro do próprio repositório como exemplo de separação entre
+  model e entity, resources centralizados, DI, states por fluxo e fixtures alinhados
+  ao contrato real.
+- **DI gerado.** Quando o projeto usar geração de código para injeção de dependência
+  (ex.: `@Injectable` + `get_it`) e você alterar uma assinatura anotada, descubra o
+  executável de geração adotado pelo repositório. Em monorepos ou pacotes isolados,
+  prefira `dart run build_runner build --delete-conflicting-outputs` dentro do pacote
+  que possui o `pubspec.yaml`; não tente executar `flutter pub run build_runner` se o
+  pacote estiver disponível apenas via wrapper ou dependência transitiva. Não
+  substitua a configuração gerada por `registerFactory` manual para classes anotadas;
+  regenere e versione o arquivo `.config.dart`, validando a composição real no container
+  de DI (ex.: GetIt).
 - **Verifique antes de dizer "pronto".** Rode o que for aplicável:
   - `dart analyze` / `flutter analyze` — erros estáticos
   - `flutter test` — testes unitários/widget
   - `flutter build` — garantir que compila
   - `dart format --set-exit-if-changed .` — formatação
+  - testes com cobertura e inspeção do LCOV quando o pipeline usar Sonar ou cobertura
+    de diff
   Se algo falha, diga com a saída. Nunca afirme concluído sem verificação.
 - **Não invente.** Comando, arquivo, flag ou API que você não conhece: verifique no
   código ou pergunte. Memórias e contexto podem estar desatualizados — confirme no
@@ -71,6 +99,18 @@ Não escreva nem rode nada que altere o projeto antes de passar por aqui.
 - **Respeite a arquitetura existente.** Antes de criar algo novo, entenda o padrão
   de pastas, nomenclatura e gerenciamento de estado que o projeto já usa. Não
   introduza padrões conflitantes sem discutir.
+- **Parsing e UI.** Não preserve fallback silencioso quando o contrato exigir erro
+  para dados inválidos. Na presentation, mantenha visibilidade, ação habilitada,
+  campos opcionais e navegação tipada cobertos por testes.
+- **Migração de contrato.** Quando a API mudar chaves, casing ou estrutura,
+  faça uma busca por todas as representações do payload antes de editar. Atualize
+  parser, fixtures unitárias, mocks de integração e registries compartilhados de
+  mock, depois valide um payload novo e a rejeição do contrato antigo.
+- **Navegação e analytics.** Antes de concluir fluxos com navegação ou elementos
+  dinâmicos, verifique rota, URL, parâmetros permitidos e comportamento para rota
+  inválida. Confirme na interface concreta do projeto se o registro deve usar log de
+  erro (ex.: `trackErrorLog`) ou um evento de analytics, sem inventar ou copiar uma
+  API de outro módulo.
 
 ## 3. Ações que exigem permissão explícita (nunca faça sozinho)
 
@@ -114,8 +154,27 @@ Antes de finalizar qualquer tarefa, confirme:
 - [ ] Código formatado (`dart format .`)
 - [ ] Imports organizados (sem imports não utilizados)
 - [ ] Sem `print()` / `debugPrint()` esquecidos em código de produção
+- [ ] Nenhuma credencial, token ou dado sensível foi introduzido em código, logs ou
+  mocks
+- [ ] Mocks não usam dados reais ou sensíveis
+- [ ] Imagens adicionadas ou alteradas foram otimizadas quando aplicável
 - [ ] Strings hardcoded avaliadas (i18n, se o projeto usa)
+- [ ] Strings, endpoints e tags centralizados em resources quando forem contratos da
+  feature
+- [ ] Testes unitários adicionados para todas as camadas alteradas
+- [ ] Testes integrados atualizados para widgets/pages quando o fluxo visual ou de
+  navegação mudou
+- [ ] Cobertura LCOV conferida nos arquivos alterados quando o pipeline usar Sonar ou
+  cobertura de diff
 - [ ] Nenhum `TODO` / `FIXME` introduzido sem sinalizar ao usuário
+- [ ] Arquivos gerados pelo DI foram regenerados após mudanças em construtores
+  anotados
+- [ ] Factories do container de DI (ex.: GetIt) e testes usam todas as dependências
+  exigidas pelos construtores reais
+- [ ] Cubits/controllers criados manualmente ou com `BlocProvider.value` possuem dono
+  claro do `close`/`dispose`
+- [ ] Erros de cada fluxo registram o side effect correto e preservam o feedback
+  visual correspondente
 
 ## Referências
 

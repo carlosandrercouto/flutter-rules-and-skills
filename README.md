@@ -29,8 +29,8 @@ Protocolo de segurança para qualquer alteração no código. Garante que o assi
 
 Monta o título + corpo da PR já preenchidos a partir do contexto do trabalho feito, prontos para colar no GitHub/GitLab/Bitbucket.
 
-- Título em inglês (Conventional Commits: `type(scope): description`)
-- Corpo em português humano, tom simples
+- Título em português (Conventional Commits: `<tipo>(<escopo>): <resumo>`)
+- Corpo em português humano, tom simples (Resumo, Alterações, Testes Realizados, Como testar e Evidências de Sucesso / Falha e reload)
 - Auto-detecção de template de PR (`.github/PULL_REQUEST_TEMPLATE.md` ou equivalente)
 - Modelo padrão embutido caso o projeto não tenha template
 - Suporte a `gh pr create` (GitHub) e `glab mr create` (GitLab)
@@ -76,10 +76,11 @@ Dois registros que nunca se misturam: comentário de task (humano) e mensagem de
 
 ### 🏷️ [criar-commit-cz](criar-commit-cz/SKILL.md)
 
-Gera o texto de commit no formato específico do Commitizen (`cz`): tipo, título e descrição longa **em três saídas separadas**, prontas para colar nos prompts do `cz`.
+Gera o texto de commit no formato específico do Commitizen (`cz`): tipo, escopo, título e descrição longa **em quatro saídas separadas**, prontas para colar nos prompts do `cz`.
 
-- Tipo em linha separada (para selecionar com setas no terminal)
-- Título com escopo composto (`área > alvo`)
+- Tipo em bloco separado (para selecionar com setas no terminal)
+- Escopo isolado (sem parênteses ou dois pontos, pronto para o campo de escopo do `cz`)
+- Título curto apenas com a descrição no imperativo (sem repetir tipo ou escopo)
 - Descrição longa em português, com verbos no imperativo
 - Quebra de linha vira `|` (o campo do `cz` trata Enter como envio)
 
@@ -89,44 +90,69 @@ Gera o texto de commit no formato específico do Commitizen (`cz`): tipo, títul
 
 ### 🧪 [escrever-testes](escrever-testes/SKILL.md)
 
-Sistema completo de testes para Flutter: scaffold automático, moldes prontos, relatório de cobertura interativo.
+Sistema completo de testes para Flutter: scaffold automático, moldes prontos (AAA / Given-When-Then) e meta de cobertura LCOV **>= 90%** alinhada com a skill `valide-testes-unitarios`.
 
-- **7 moldes** (M1 a M7): use case, repository, fromJson, controller/cubit, widget smoke, integração, clock injetável
+- **8 moldes** (M1 a M8): use case, repository, model/mapper (`fromJson`), controller/cubit (estados + side effects), page/widget (render + interação + navegação + analytics), integração (`test/integration_tests/` e `integration_test/`), clock injetável e DI/GetIt
 - **Script `scaffold_tests.py`**: escaneia o módulo e gera os esqueletos de teste com imports reais e TODOs
 - **Script `coverage_report.py`**: relatório interativo em HTML com barras empilhadas por arquivo, busca, filtros e cartão PNG por módulo
-- Regras duras: mock só de interface (mocktail), nunca API real no run padrão, sempre Success E Failure
-- Auto-detecção de arquitetura (`lib/features/`, `lib/app/modules/`, `lib/src/`, etc.)
+- Regras duras: mock só de interface (`mocktail`), nunca API real no run padrão, sempre Success E Failure, validação de estados + side effects e cobertura agregada >= 90% sem testes artificiais
 
-**Quando ativa:** "escreve os testes", "testa o use case", "cobre com testes", "aumenta a cobertura".
+**Quando ativa:** "escreve os testes", "testa o use case", "cobre com testes", "aumenta a cobertura para 90%".
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `SKILL.md` | Protocolo principal |
-| `references/moldes.md` | Moldes M1 a M7 com código completo |
+| `SKILL.md` | Protocolo principal e requisitos por camada |
+| `references/moldes.md` | Moldes M1 a M8 com código completo |
 | `references/mocktail.md` | Guia de mocktail: API, regras e armadilhas |
-| `references/checklist-dod.md` | Definition of Done por PR |
-| `references/cobertura.md` | Como gerar, exibir e ler cobertura com honestidade |
+| `references/checklist-dod.md` | Definition of Done por escopo/PR (meta >= 90%) |
+| `references/cobertura.md` | Como gerar, filtrar por escopo e garantir >= 90% no LCOV |
 | `scripts/scaffold_tests.py` | Gerador de esqueletos de teste |
 | `scripts/coverage_report.py` | Relatório de cobertura interativo (terminal + HTML) |
 
 ---
 
-### 📚 [gerar-documentacao](gerar-documentacao/SKILL.md)
+### ✅ [valide-testes-unitarios](valide-testes-unitarios/SKILL.md)
 
-Gera documentação técnica de módulos/features Flutter com sistema de baseline incremental via git.
+Valida de ponta a ponta os testes unitários, de widget/page e integrados de um domínio, módulo ou submódulo/feature Flutter, garantindo **no mínimo 90% de cobertura agregada de linha (LCOV)** no escopo alvo.
 
-- Baseline por SHA: só regenera o que mudou desde o último snapshot
-- Hub de navegação (HTML ou Markdown) com índice de todos os módulos documentados
-- Auto-detecção da estrutura de módulos do projeto
-- Estado persistido em `docs/.docstate.json`
+- **Resolução de contexto:** identifica workspace, package (`pubspec.yaml`) e submódulo/feature alvo
+- **Execução separada:** roda a suíte unitária (`test/<escopo>`) e os testes integrados (`test/integration_tests/` ou `integration_test/`) sem misturá-los
+- **Auditoria LCOV >= 90%:** calcula a cobertura agregada apenas dos arquivos de produção do escopo alvo e lista arquivos individuais abaixo de 90%
+- **Correção controlada:** preenche lacunas reais seguindo a skill `escrever-testes` (em até 3 ciclos), sem alterar código de produção para inflar percentual e sem criar testes artificiais para constantes
 
-**Quando ativa:** "documenta o módulo X", "gera a documentação", "atualiza a doc".
+**Quando ativa:** "valide os testes", "valide os testes unitários", "rode os integrados", "confira a cobertura", "garanta 90% de cobertura".
+
+---
+
+### 📚 [assimilar-conhecimento-documentacao](assimilar-conhecimento-documentacao/SKILL.md)
+
+Lê um projeto, módulo ou feature especificada (ou assimila descobertas técnicas durante a conversa) e gera documentação sincronizada em **dois formatos**:
+
+- **HTML em linguagem humana** (`doc-modulos/`): navegável por domínio, módulo e submódulo, ideal para consultas rápidas de devs e stakeholders
+- **Markdown técnico para IA** (`ia-conhecimento/*.md`): estrutura canônica e densa com metadados, arquitetura, evidências e contratos técnicos para consulta rápida de agentes e RAG
+- **Três modos de execução:** pontual (descoberta, módulo ou feature específica), incremental via git (`BASE..HEAD`) e varredura completa do projeto
+- Estado e baseline por SHA persistidos em `.docstate.json` para evitar retrabalho
+
+**Quando ativa:** "documenta o módulo X", "documenta essa feature", "assimile o conhecimento", "registre essa descoberta técnica", "atualize a documentação", "sincronize docs", "consolide a doc".
 
 | Arquivo | Descrição |
 |---------|-----------|
-| `SKILL.md` | Protocolo principal |
-| `references/baseline-git.md` | Como funciona o sistema de baseline incremental |
-| `references/indice-hub.md` | Template e lógica do hub de navegação |
+| `SKILL.md` | Protocolo principal (modos pontual, incremental e completo + saída dupla HTML e `.md`) |
+| `references/baseline-git.md` | Sistema de baseline incremental e `.docstate.json` |
+| `references/indice-hub.md` | Estrutura dos hubs HTML (`doc-modulos/`) e índice de `ia-conhecimento/` |
+
+---
+
+### 🔎 [consultar-documentacao-modulo](consultar-documentacao-modulo/SKILL.md)
+
+Recupera contexto arquitetural e técnico de um domínio, módulo, package ou feature a partir da documentação gerada antes de explorar o código-fonte.
+
+- **Prioridade clara de leitura:** `.docstate.json` → fichas técnicas em `ia-conhecimento/*.md` → `context.md`/`README.md` → HTML humano (`doc-modulos/`) → confirmação pontual no código
+- **Rastreabilidade explícita:** separa o que está **Documentado**, **Confirmado no código**, **Não documentado** e **Impacto para a tarefa**
+- Evita varreduras desnecessárias do repositório e garante aderência às convenções e contratos já mapeados
+- Somente leitura: nunca altera arquivos do projeto
+
+**Quando ativa:** "busque informações sobre o módulo", "consulte a documentação do módulo", "qual API ou rota esse módulo usa", "como funciona esse package".
 
 ---
 
@@ -170,11 +196,15 @@ flutter-rules-and-skills/
 │   └── scripts/
 │       ├── scaffold_tests.py
 │       └── coverage_report.py
-├── gerar-documentacao/
+├── valide-testes-unitarios/
+│   └── SKILL.md
+├── assimilar-conhecimento-documentacao/
 │   ├── SKILL.md
 │   └── references/
 │       ├── baseline-git.md
 │       └── indice-hub.md
+├── consultar-documentacao-modulo/
+│   └── SKILL.md
 └── registrar-nova-skill/
     └── SKILL.md
 ```
