@@ -6,7 +6,7 @@ Coleção de skills genéricas para projetos Flutter, prontas para uso com assis
 
 ## Skills
 
-### 🛡️ [trabalho-seguro](trabalho-seguro/SKILL.md)
+### 🛡️ [trabalho-seguro](.agents/skills/trabalho-seguro/SKILL.md)
 
 Protocolo de segurança para qualquer alteração no código. Garante que o assistente nunca quebre o que funciona.
 
@@ -25,7 +25,7 @@ Protocolo de segurança para qualquer alteração no código. Garante que o assi
 
 ---
 
-### 📝 [abrir-pr](abrir-pr/SKILL.md)
+### 📝 [abrir-pr](.agents/skills/abrir-pr/SKILL.md)
 
 Monta o título + corpo da PR já preenchidos a partir do contexto do trabalho feito, prontos para colar no GitHub/GitLab/Bitbucket.
 
@@ -40,7 +40,7 @@ Monta o título + corpo da PR já preenchidos a partir do contexto do trabalho f
 
 ---
 
-### 🔍 [revisar-pr](revisar-pr/SKILL.md)
+### 🔍 [revisar-pr](.agents/skills/revisar-pr/SKILL.md)
 
 Code review de PR com foco em **bugs de verdade**, não lista exaustiva de estilo. A maior e mais detalhada skill da coleção (410 linhas).
 
@@ -55,7 +55,7 @@ Code review de PR com foco em **bugs de verdade**, não lista exaustiva de estil
 
 ---
 
-### 💬 [comentarios-task-commits](comentarios-task-commits/SKILL.md)
+### 💬 [comentarios-task-commits](.agents/skills/comentarios-task-commits/SKILL.md)
 
 Dois registros que nunca se misturam: comentário de task (humano) e mensagem de commit (técnica).
 
@@ -74,7 +74,7 @@ Dois registros que nunca se misturam: comentário de task (humano) e mensagem de
 
 ---
 
-### 🏷️ [criar-commit-cz](criar-commit-cz/SKILL.md)
+### 🏷️ [criar-commit-cz](.agents/skills/criar-commit-cz/SKILL.md)
 
 Gera o texto de commit no formato específico do Commitizen (`cz`): tipo, escopo, título e descrição longa **em quatro saídas separadas**, prontas para colar nos prompts do `cz`.
 
@@ -88,7 +88,7 @@ Gera o texto de commit no formato específico do Commitizen (`cz`): tipo, escopo
 
 ---
 
-### 🧪 [escrever-testes](escrever-testes/SKILL.md)
+### 🧪 [escrever-testes](.agents/skills/escrever-testes/SKILL.md)
 
 Sistema completo de testes para Flutter: scaffold automático, moldes prontos (AAA / Given-When-Then) e meta de cobertura LCOV **>= 90%** alinhada com a skill `valide-testes-unitarios`.
 
@@ -111,7 +111,7 @@ Sistema completo de testes para Flutter: scaffold automático, moldes prontos (A
 
 ---
 
-### ✅ [valide-testes-unitarios](valide-testes-unitarios/SKILL.md)
+### ✅ [valide-testes-unitarios](.agents/skills/valide-testes-unitarios/SKILL.md)
 
 Valida de ponta a ponta os testes unitários, de widget/page e integrados de um domínio, módulo ou submódulo/feature Flutter, garantindo **no mínimo 90% de cobertura agregada de linha (LCOV)** no escopo alvo.
 
@@ -124,7 +124,7 @@ Valida de ponta a ponta os testes unitários, de widget/page e integrados de um 
 
 ---
 
-### 📚 [assimilar-conhecimento-documentacao](assimilar-conhecimento-documentacao/SKILL.md)
+### 📚 [assimilar-conhecimento-documentacao](.agents/skills/assimilar-conhecimento-documentacao/SKILL.md)
 
 Lê um projeto, módulo ou feature especificada (ou assimila descobertas técnicas durante a conversa) e gera documentação sincronizada em **dois formatos**:
 
@@ -143,7 +143,7 @@ Lê um projeto, módulo ou feature especificada (ou assimila descobertas técnic
 
 ---
 
-### 🔎 [consultar-documentacao-modulo](consultar-documentacao-modulo/SKILL.md)
+### 🔎 [consultar-documentacao-modulo](.agents/skills/consultar-documentacao-modulo/SKILL.md)
 
 Recupera contexto arquitetural e técnico de um domínio, módulo, package ou feature a partir da documentação gerada antes de explorar o código-fonte.
 
@@ -156,7 +156,31 @@ Recupera contexto arquitetural e técnico de um domínio, módulo, package ou fe
 
 ---
 
-### 📋 [registrar-nova-skill](registrar-nova-skill/SKILL.md)
+### ⚙️ [configurar-code-review](.agents/skills/configurar-code-review/SKILL.md)
+
+Atua como Tech Lead Sênior especialista em Flutter/Dart para mapear a arquitetura do projeto e evoluir continuamente as diretrizes de revisão em `.agents/rules/code-review-rules.md`.
+
+- **Inspeção inicial:** analisa `pubspec.yaml`, `analysis_options.yaml`, estrutura `lib/`/`test/` e módulos de referência para criar o baseline de regras
+- **Aprendizado contínuo por PR:** traduz comentários de revisores humanos em diretrizes permanentes organizadas por categoria (Domínio, Dados, Apresentação, Null Safety, Performance e Convenções)
+- **Orçamento controlado:** consolida regras sem duplicidade mantendo o arquivo abaixo de 24 KB
+
+**Quando ativa:** "configure code review", "assimile conhecimento code review", "aprenda a fazer code review", "atualizar regras de review".
+
+---
+
+### 🧐 [fazer-code-review](.agents/skills/fazer-code-review/SKILL.md)
+
+Auditoria técnica pragmática em Pull Requests ou branches locais como Tech Lead Sênior Flutter/Dart, guiada pelo contexto da task e por `.agents/rules/code-review-rules.md`.
+
+- **Gates obrigatórios:** exige `.agents/rules/code-review-rules.md` configurado e coleta prévia do contexto/critérios de aceite da task antes de ler o diff
+- **Auditoria em 3 pilares:** Clean Architecture (UI burra e domínio puro), boas práticas Dart (`async`/`mounted`, `Bad State`, Sound Null Safety, `final`/`const`, over-engineering/segurança) e efeitos colaterais/testes
+- **Saída objetiva por gravidade:** achados em 🔴 Grave, 🟡 Médio e 🟢 Leve com localização exata e sugestão pronta de correção
+
+**Quando ativa:** "faça code review da pr", "faça cr da pr", "faça cr", "faça code review da pr ... ja dei checkout na branch".
+
+---
+
+### 📋 [registrar-nova-skill](.agents/skills/registrar-nova-skill/SKILL.md)
 
 Meta-skill: guia para criar novas skills seguindo o padrão desta coleção.
 
@@ -173,51 +197,59 @@ Meta-skill: guia para criar novas skills seguindo o padrão desta coleção.
 ```
 flutter-rules-and-skills/
 ├── README.md
-├── trabalho-seguro/
-│   ├── SKILL.md
-│   └── references/
-│       ├── kickoff-checklist.md
-│       └── stop-and-ask.md
-├── abrir-pr/
-│   └── SKILL.md
-├── revisar-pr/
-│   └── SKILL.md
-├── comentarios-task-commits/
-│   └── SKILL.md
-├── criar-commit-cz/
-│   └── SKILL.md
-├── escrever-testes/
-│   ├── SKILL.md
-│   ├── references/
-│   │   ├── moldes.md
-│   │   ├── mocktail.md
-│   │   ├── checklist-dod.md
-│   │   └── cobertura.md
-│   └── scripts/
-│       ├── scaffold_tests.py
-│       └── coverage_report.py
-├── valide-testes-unitarios/
-│   └── SKILL.md
-├── assimilar-conhecimento-documentacao/
-│   ├── SKILL.md
-│   └── references/
-│       ├── baseline-git.md
-│       └── indice-hub.md
-├── consultar-documentacao-modulo/
-│   └── SKILL.md
-└── registrar-nova-skill/
-    └── SKILL.md
+└── .agents/
+    ├── rules/
+    │   └── code-review-rules.md (gerado/atualizado por configurar-code-review no projeto alvo)
+    └── skills/
+        ├── trabalho-seguro/
+        │   ├── SKILL.md
+        │   └── references/
+        │       ├── kickoff-checklist.md
+        │       └── stop-and-ask.md
+        ├── abrir-pr/
+        │   └── SKILL.md
+        ├── revisar-pr/
+        │   └── SKILL.md
+        ├── comentarios-task-commits/
+        │   └── SKILL.md
+        ├── criar-commit-cz/
+        │   └── SKILL.md
+        ├── escrever-testes/
+        │   ├── SKILL.md
+        │   ├── references/
+        │   │   ├── moldes.md
+        │   │   ├── mocktail.md
+        │   │   ├── checklist-dod.md
+        │   │   └── cobertura.md
+        │   └── scripts/
+        │       ├── scaffold_tests.py
+        │       └── coverage_report.py
+        ├── valide-testes-unitarios/
+        │   └── SKILL.md
+        ├── assimilar-conhecimento-documentacao/
+        │   ├── SKILL.md
+        │   └── references/
+        │       ├── baseline-git.md
+        │       └── indice-hub.md
+        ├── consultar-documentacao-modulo/
+        │   └── SKILL.md
+        ├── configurar-code-review/
+        │   └── SKILL.md
+        ├── fazer-code-review/
+        │   └── SKILL.md
+        └── registrar-nova-skill/
+            └── SKILL.md
 ```
 
 ## Como usar
 
-### Com Claude (Anthropic) / Gemini (Google)
+### Com Antigravity / Claude (Anthropic) / Gemini (Google)
 
-Copie as skills desejadas para a pasta `.claude/skills/` ou `.gemini/skills/` (dependendo do assistente) do seu projeto Flutter:
+Copie as skills desejadas para a pasta `.agents/skills/` (padrão Antigravity), `.claude/skills/` ou `.gemini/skills/` do seu projeto Flutter:
 
 ```bash
-cp -r trabalho-seguro /caminho/do/projeto/.claude/skills/
-cp -r escrever-testes /caminho/do/projeto/.claude/skills/
+cp -r .agents/skills/trabalho-seguro /caminho/do/projeto/.agents/skills/
+cp -r .agents/skills/escrever-testes /caminho/do/projeto/.agents/skills/
 # ... etc
 ```
 
